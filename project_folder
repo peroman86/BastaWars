@@ -1,0 +1,27 @@
+your_game_name/
+├── assets/
+│   ├── animations/
+│   ├── fonts/
+│   ├── materials/
+│   ├── models/
+│   ├── music/
+│   ├── sounds/
+│   ├── sprites/
+│   │   ├── characters/
+│   │   ├── items/
+│   │   ├── ui/
+│   │   └── environment/
+│   └── textures/
+├── scenes/
+│   ├── levels/
+│   ├── menus/
+│   └── prefabs/
+├── scripts/
+│   ├── autoload/
+│   ├── resources/
+│   └── classes/
+├── addons/
+├── default_env.tres
+├── icon.png
+├── project.godot
+└── export_presets.cfg 
