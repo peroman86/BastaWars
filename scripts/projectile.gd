@@ -8,7 +8,6 @@ func _ready():
 	contact_monitor = true
 	max_contacts_reported = 1
 	connect("body_entered", _on_body_entered)
-	modulate = Color(1, 0, 0)
 	scale = Vector2(2, 2)
 	print("Projectile created at: ", position)
 
@@ -23,6 +22,20 @@ func throw(force: float):
 	apply_central_impulse(Vector2(force, -600))
 
 func _on_body_entered(body):
-	if thrown and (body is StaticBody2D):
-		print("Hit something!")
+	if not thrown:
+		return
+		
+	if body is StaticBody2D:
+		print("Hit wall!")
 		queue_free()
+	elif body.has_method("take_damage"):
+		# Only damage if the projectile color doesn't match the body
+		# Red projectiles (from player) damage blue enemies
+		# Blue projectiles (from enemy) damage the player
+		var is_player_projectile = modulate == Color(1, 0, 0)  # Red
+		var hit_player = body.get_script().resource_path.ends_with("player.gd")
+		
+		if (is_player_projectile and not hit_player) or (not is_player_projectile and hit_player):
+			print("Hit character!")
+			body.take_damage()
+			queue_free()

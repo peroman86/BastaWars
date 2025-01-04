@@ -1,15 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://d126fbl2wkpj3"]
+[gd_scene load_steps=8 format=3 uid="uid://d126fbl2wkpj3"]
 
 [ext_resource type="PackedScene" uid="uid://dpokhjn0va64c" path="res://scenes/player.tscn" id="1_rk4n3"]
 [ext_resource type="PackedScene" uid="uid://cfjaoqttltih5" path="res://scenes/ammo_pile.tscn" id="2_ammo"]
+[ext_resource type="PackedScene" uid="uid://buh4mep5mcpbd" path="res://scenes/enemy.tscn" id="3_enemy"]
+[ext_resource type="PackedScene" uid="uid://bdkeb3lfq1t8t" path="res://scenes/enemy_ammo_pile.tscn" id="4_enemy_ammo"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="5_manager"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
-size = Vector2(2000, 64)
+size = Vector2(1653, 64)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ground"]
 size = Vector2(2000, 64)
 
 [node name="World" type="Node2D"]
+script = ExtResource("5_manager")
+
+[node name="AmmoPile" parent="." instance=ExtResource("2_ammo")]
+position = Vector2(-448, 470)
+scale = Vector2(3, 3)
 
 [node name="Player" parent="." instance=ExtResource("1_rk4n3")]
 position = Vector2(-373, 375)
@@ -23,15 +31,21 @@ drag_left_margin = 0.1
 drag_right_margin = 0.1
 editor_draw_drag_margin = true
 
+[node name="EnemyAmmoPile" parent="." instance=ExtResource("4_enemy_ammo")]
+position = Vector2(1099, 470)
+scale = Vector2(3, 3)
+
+[node name="Enemy" parent="." instance=ExtResource("3_enemy")]
+position = Vector2(1024, 375)
+
 [node name="Ground" type="StaticBody2D" parent="."]
 position = Vector2(500, 550)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(-173.5, 0)
 shape = SubResource("RectangleShape2D_ground")
 
 [node name="Sprite2D" type="Sprite2D" parent="Ground"]
+position = Vector2(-174.5, 0)
+scale = Vector2(0.8255, 1)
 texture = SubResource("PlaceholderTexture2D_ground")
-
-[node name="AmmoPile" parent="." instance=ExtResource("2_ammo")]
-position = Vector2(-448, 470)
-scale = Vector2(3, 3)
