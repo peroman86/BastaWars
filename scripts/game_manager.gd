@@ -7,8 +7,23 @@ var battle_over_label: Label
 var respawn_button: Button
 var canvas_layer: CanvasLayer
 var battle_in_progress = true  # Track if battle is active
+var background_music: AudioStreamPlayer
 
 func _ready():
+	# Setup background music
+	background_music = AudioStreamPlayer.new()
+	var music = load("res://assets/music/background.mp3")
+	if music:
+		print("Music loaded successfully")
+		background_music.stream = music
+		background_music.volume_db = -10  # Slightly lower volume
+		background_music.autoplay = true
+		background_music.stream.loop = true  # Enable looping
+		add_child(background_music)
+		background_music.play()
+	else:
+		print("Failed to load music file")
+
 	# Create UI layer
 	canvas_layer = CanvasLayer.new()
 	add_child(canvas_layer)
@@ -89,3 +104,8 @@ func _on_respawn_pressed():
 		enemy.show()
 		enemy.respawn()
 		enemy.set_battle_active(true) 
+
+func _process(_delta):
+	# Loop the music
+	if not background_music.playing:
+		background_music.play() 
