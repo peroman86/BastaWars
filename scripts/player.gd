@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var jump_force = -400.0
 @export var gravity = 980.0
 @export var throw_force = 600.0
+@export var fall_threshold = 800  # Y position at which player is considered fallen
 
 var ammo_count = 0
 var max_ammo = 5
@@ -36,6 +37,10 @@ Throw: Press X (needs ammo)"""
 	update_ammo_display()
 
 func _physics_process(delta):
+	# Check if player has fallen too far
+	if position.y > fall_threshold:
+		reset_game()
+		
 	# Add gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -83,3 +88,10 @@ func collect_ammo(amount: int):
 func update_ammo_display():
 	if ammo_label:
 		ammo_label.text = "Ammo: " + str(ammo_count) + "/" + str(max_ammo)
+
+func reset_game():
+	# Reset player position to starting point
+	position = Vector2(-373, 375)  # Original spawn position from world scene
+	velocity = Vector2.ZERO
+	ammo_count = 0
+	update_ammo_display()
