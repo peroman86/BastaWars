@@ -4,15 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://cfjaoqttltih5" path="res://scenes/ammo_pile.tscn" id="2_ammo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
-size = Vector2(1000, 64)
+size = Vector2(2000, 64)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ground"]
-size = Vector2(1000, 64)
+size = Vector2(2000, 64)
 
 [node name="World" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_rk4n3")]
-position = Vector2(100, 300)
+position = Vector2(-373, 375)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(335, 2)
@@ -33,4 +33,5 @@ shape = SubResource("RectangleShape2D_ground")
 texture = SubResource("PlaceholderTexture2D_ground")
 
 [node name="AmmoPile" parent="." instance=ExtResource("2_ammo")]
-position = Vector2(50, 500)
+position = Vector2(-448, 470)
+scale = Vector2(3, 3)
