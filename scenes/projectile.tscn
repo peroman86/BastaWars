@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/projectile.gd" id="1_nxu4t"]
 [ext_resource type="Texture2D" uid="uid://bcyxnin401ty2" path="res://assets/sprites/items/Bomb On (52x56).png" id="3_12q1e"]
 [ext_resource type="Texture2D" uid="uid://qrwvv8aq5gsi" path="res://assets/sprites/items/Boooooom (52x56).png" id="4_sc0rl"]
+[ext_resource type="AudioStream" uid="uid://boom" path="res://assets/music/boom sound.mp3" id="5_boom"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_projectile"]
 radius = 8.0
@@ -146,3 +147,7 @@ tree_root = SubResource("AnimationNodeStateMachine_wgjsr")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/exploded = false
 parameters/conditions/thrown = false
+
+[node name="ExplosionSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_boom")
+volume_db = 0.0

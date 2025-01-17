@@ -4,6 +4,7 @@ extends RigidBody2D
 @onready var bomb_sprite: Sprite2D = $BombOnAnimation
 @onready var boom_sprite: Sprite2D = $BoomAnimation
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var explosion_sound: AudioStreamPlayer = $ExplosionSound
 
 var thrown = false
 var hit_wall = false
@@ -65,6 +66,11 @@ func explode():
 	freeze = true
 	linear_velocity = Vector2.ZERO
 	angular_velocity = 0
+	
+	# Play explosion sound
+	if explosion_sound:
+		explosion_sound.play()
+	
 	# Show explosion sprite
 	update_active_sprite()
 	# Wait for explosion animation to finish

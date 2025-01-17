@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dgaqus8f87ih1" path="res://assets/sprites/characters/03-Pig/Idle (34x28).png" id="2_yyoa8"]
 [ext_resource type="Texture2D" uid="uid://mfk15hqbj281" path="res://assets/sprites/characters/03-Pig/Run (34x28).png" id="3_1qwri"]
 [ext_resource type="Texture2D" uid="uid://jxfivcuc2syq" path="res://assets/sprites/characters/03-Pig/Jump (34x28).png" id="4_6brp8"]
-[ext_resource type="AudioStream" path="res://assets/music/throw sound.mp3" id="5_throw"]
+[ext_resource type="AudioStream" uid="uid://c244so316paut" path="res://assets/music/throw sound.mp3" id="5_throw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(53, 50)
@@ -50,6 +50,10 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
+[sub_resource type="Animation" id="Animation_semnk"]
+resource_name = "Jump"
+step = 0.1
+
 [sub_resource type="Animation" id="Animation_2ldap"]
 length = 0.001
 tracks/0/type = "value"
@@ -94,10 +98,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [0, 1, 2, 3, 4]
 }
-
-[sub_resource type="Animation" id="Animation_semnk"]
-resource_name = "Jump"
-step = 0.1
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_o00gd"]
 _data = {
@@ -146,4 +146,3 @@ libraries = {
 
 [node name="ThrowSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_throw")
-volume_db = 0.0

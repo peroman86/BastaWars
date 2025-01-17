@@ -16,7 +16,7 @@ extends CharacterBody2D
 var health = 5
 var ammo_count = 0
 var max_ammo = 5
-var Projectile = preload("res://scenes/projectile.tscn")
+const Projectile = preload("res://scenes/projectile.tscn")
 var ammo_label: Label
 var health_label: Label
 var controls_label: Label
