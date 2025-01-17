@@ -6,6 +6,11 @@ extends CharacterBody2D
 @export var detection_range = 400.0
 @export var throw_cooldown = 1.0
 
+@onready var animation_tree: AnimationTree = $AnimationTree
+@onready var idle_sprite: Sprite2D = $IdleAnimation
+@onready var run_sprite: Sprite2D = $RunAnimation
+@onready var jump_sprite: Sprite2D = $JumpAnimation
+
 var health = 5
 var ammo_count = 0
 var max_ammo = 5
@@ -39,6 +44,15 @@ func _ready():
 	var ammo_pile = get_parent().get_node("EnemyAmmoPile")
 	if ammo_pile:
 		ammo_pile_position = ammo_pile.position
+	
+	# Initialize animations
+	animation_tree.active = true
+	run_sprite.hide()
+	jump_sprite.hide()
+
+func _process(_delta):
+	update_animation_tree()
+	update_active_sprite()
 
 func _physics_process(delta):
 	if not battle_active:
@@ -60,6 +74,8 @@ func _physics_process(delta):
 		if is_aggressive:
 			# Update facing direction based on player position
 			facing_direction = sign(player.position.x - position.x)
+			# Update sprite direction
+			scale.x = -facing_direction
 			
 			# If we're out of ammo, go get some
 			if ammo_count == 0:
@@ -83,9 +99,19 @@ func _physics_process(delta):
 		else:
 			# When not aggressive, just face the player's direction
 			facing_direction = sign(player.position.x - position.x)
+			scale.x = -facing_direction
 			velocity.x = move_toward(velocity.x, 0, speed)
 	
 	move_and_slide()
+
+func update_animation_tree():
+	animation_tree["parameters/conditions/idle"] = is_on_floor() and velocity.x == 0
+	animation_tree["parameters/conditions/is_moving"] = is_on_floor() and velocity.x != 0
+
+func update_active_sprite():
+	idle_sprite.visible = is_on_floor() and velocity.x == 0
+	run_sprite.visible = is_on_floor() and velocity.x != 0
+	jump_sprite.visible = not is_on_floor()
 
 func throw_ammo():
 	if ammo_count <= 0:
