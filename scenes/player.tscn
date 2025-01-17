@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://dpokhjn0va64c"]
+[gd_scene load_steps=18 format=3 uid="uid://dpokhjn0va64c"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_2e4v3"]
 [ext_resource type="Texture2D" uid="uid://dc1cpmdpwidsv" path="res://assets/sprites/characters/01-King Human/Idle (78x58).png" id="2_8eu3u"]
 [ext_resource type="Texture2D" uid="uid://b38q4i58swws0" path="res://assets/sprites/characters/01-King Human/Run (78x58).png" id="3_b47y1"]
 [ext_resource type="Texture2D" uid="uid://wy53ink2fym3" path="res://assets/sprites/characters/01-King Human/Jump (78x58).png" id="4_aemej"]
+[ext_resource type="AudioStream" path="res://assets/music/throw sound.mp3" id="5_throw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j6k8p"]
 size = Vector2(18, 26)
@@ -163,3 +164,7 @@ tree_root = SubResource("AnimationNodeStateMachine_76e56")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
 parameters/conditions/is_moving = false
+
+[node name="ThrowSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_throw")
+volume_db = 0.0

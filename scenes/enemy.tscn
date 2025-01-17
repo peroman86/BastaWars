@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://buh4mep5mcpbd"]
+[gd_scene load_steps=18 format=3 uid="uid://buh4mep5mcpbd"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_m2n4p"]
 [ext_resource type="Texture2D" uid="uid://dgaqus8f87ih1" path="res://assets/sprites/characters/03-Pig/Idle (34x28).png" id="2_yyoa8"]
 [ext_resource type="Texture2D" uid="uid://mfk15hqbj281" path="res://assets/sprites/characters/03-Pig/Run (34x28).png" id="3_1qwri"]
 [ext_resource type="Texture2D" uid="uid://jxfivcuc2syq" path="res://assets/sprites/characters/03-Pig/Jump (34x28).png" id="4_6brp8"]
+[ext_resource type="AudioStream" path="res://assets/music/throw sound.mp3" id="5_throw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(53, 50)
@@ -142,3 +143,7 @@ parameters/conditions/is_moving = false
 libraries = {
 "": SubResource("AnimationLibrary_o00gd")
 }
+
+[node name="ThrowSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_throw")
+volume_db = 0.0

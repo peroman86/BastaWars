@@ -10,6 +10,7 @@ extends CharacterBody2D
 @onready var idle_sprite: Sprite2D = $IdleAnimation
 @onready var run_sprite: Sprite2D = $RunAnimation
 @onready var jump_sprite: Sprite2D = $JumpAnimation
+@onready var throw_sound: AudioStreamPlayer = $ThrowSound
 
 var health = 5
 var ammo_count = 0
@@ -119,6 +120,10 @@ func throw_ammo():
 		
 	ammo_count -= 1
 	can_throw = false
+	
+	# Play throw sound
+	if throw_sound:
+		throw_sound.play()
 	
 	var projectile = Projectile.instantiate()
 	projectile.position = position + Vector2(facing_direction * 30, 0)
