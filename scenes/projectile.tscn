@@ -1,12 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://cone41q5l7hcl"]
+[gd_scene load_steps=6 format=3 uid="uid://cone41q5l7hcl"]
 
 [ext_resource type="Script" path="res://scripts/projectile.gd" id="1_nxu4t"]
+[ext_resource type="Texture2D" uid="uid://7lsqon71d2pf" path="res://assets/sprites/items/Bomb Off.png" id="2_3qicr"]
+[ext_resource type="Texture2D" uid="uid://bcyxnin401ty2" path="res://assets/sprites/items/Bomb On (52x56).png" id="3_12q1e"]
+[ext_resource type="Texture2D" uid="uid://qrwvv8aq5gsi" path="res://assets/sprites/items/Boooooom (52x56).png" id="4_sc0rl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_projectile"]
 radius = 8.0
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_projectile"]
-size = Vector2(16, 16)
 
 [node name="Projectile" type="RigidBody2D"]
 collision_layer = 2
@@ -14,7 +14,22 @@ mass = 0.5
 script = ExtResource("1_nxu4t")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(3, 3)
 shape = SubResource("CircleShape2D_projectile")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("PlaceholderTexture2D_projectile")
+[node name="BombOffAnimation" type="Sprite2D" parent="."]
+position = Vector2(-1.5, -14)
+scale = Vector2(3.096, 3.229)
+texture = ExtResource("2_3qicr")
+
+[node name="BombOnAnimation" type="Sprite2D" parent="."]
+position = Vector2(-2, -13)
+scale = Vector2(3, 3)
+texture = ExtResource("3_12q1e")
+hframes = 4
+
+[node name="BoomSnimation" type="Sprite2D" parent="."]
+scale = Vector2(3, 3)
+texture = ExtResource("4_sc0rl")
+hframes = 6
+frame = 5
