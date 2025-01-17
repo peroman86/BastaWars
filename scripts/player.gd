@@ -6,14 +6,15 @@ extends CharacterBody2D
 @export var throw_force = 600.0
 @export var fall_threshold = 800  # Y position at which player is considered fallen
 
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var animation_tree: AnimationTree = $AnimationTree
 @onready var idle_sprite: Sprite2D = $IdleAnimation
+@onready var moving_sprite: Sprite2D = $MovingAnimation
+@onready var jump_sprite: Sprite2D = $JumpAnimation
 
 
 var health = 5
 var ammo_count = 0
 var max_ammo = 5
-var facing_direction = 1  # 1 for right, -1 for left
 var Projectile = preload("res://scenes/projectile.tscn")
 var ammo_label: Label
 var health_label: Label
@@ -47,7 +48,7 @@ func _ready():
 	health_label.position = Vector2(20, 40)
 	health_label.text = "Health: 5/5"
 	canvas_layer.add_child(health_label)
-	
+
 	# Create controls display
 	controls_label = Label.new()
 	controls_label.position = Vector2(20, 70)
@@ -57,18 +58,14 @@ Jump: Space Bar
 Collect Ammo: Press E near ammo pile
 Throw: Press F (needs ammo)"""
 	canvas_layer.add_child(controls_label)
-	
+
 	update_ammo_display()
 	update_health_display()
 
+	animation_tree.active = true
+
 func _process(delta):
-	if is_on_floor():
-		if velocity.x == 0:
-			play_animation("Idle")
-	 	#else:
-			#set_active_sprite(walk_sprite)
-	#else:
-		#set_active_sprite(jump_sprite)
+	update_animation_tree()
 
 func _physics_process(delta):
 	if not battle_active:
@@ -93,7 +90,6 @@ func _physics_process(delta):
 	var direction = Input.get_axis("left", "right")
 	if direction:
 		velocity.x = direction * speed
-		facing_direction = sign(direction)
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
 	
@@ -102,6 +98,7 @@ func _physics_process(delta):
 		throw_ammo()
 	
 	move_and_slide()
+	update_active_sprite()
 
 func throw_ammo():
 	if ammo_count <= 0:
@@ -110,10 +107,10 @@ func throw_ammo():
 	ammo_count -= 1
 	update_ammo_display()
 	var projectile = Projectile.instantiate()
-	projectile.position = position + Vector2(facing_direction * 30, 0)
+	projectile.position = position + Vector2( 30, 0)
 	projectile.modulate = Color(1, 0, 0)
 	get_parent().add_child(projectile)
-	projectile.throw(facing_direction * throw_force)
+	projectile.throw(throw_force)
 
 func collect_ammo(amount: int):
 	if not battle_active or ammo_count >= max_ammo:
@@ -147,6 +144,11 @@ func respawn():
 	update_ammo_display()
 	update_health_display()
 
+func update_animation_tree():
+	animation_tree['parameters/conditions/idle'] = is_on_floor() and velocity.x == 0
+	animation_tree['parameters/conditions/is_moving'] = is_on_floor() and velocity.x != 0
 
-func play_animation(animation_name: String):
-	animation_player.play(animation_name)
+func update_active_sprite():
+	idle_sprite.visible = is_on_floor() and velocity.x == 0
+	moving_sprite.visible = is_on_floor() and velocity.x != 0
+	jump_sprite.visible = not is_on_floor()
