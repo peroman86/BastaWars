@@ -6,6 +6,10 @@ extends CharacterBody2D
 @export var throw_force = 600.0
 @export var fall_threshold = 800  # Y position at which player is considered fallen
 
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var idle_sprite: Sprite2D = $IdleAnimation
+
+
 var health = 5
 var ammo_count = 0
 var max_ammo = 5
@@ -51,11 +55,20 @@ func _ready():
 Move: Left/Right Arrow Keys
 Jump: Space Bar
 Collect Ammo: Press E near ammo pile
-Throw: Press X (needs ammo)"""
+Throw: Press F (needs ammo)"""
 	canvas_layer.add_child(controls_label)
 	
 	update_ammo_display()
 	update_health_display()
+
+func _process(delta):
+	if is_on_floor():
+		if velocity.x == 0:
+			play_animation("Idle")
+	 	#else:
+			#set_active_sprite(walk_sprite)
+	#else:
+		#set_active_sprite(jump_sprite)
 
 func _physics_process(delta):
 	if not battle_active:
@@ -134,7 +147,6 @@ func respawn():
 	update_ammo_display()
 	update_health_display()
 
-func set_battle_active(active: bool):
-	battle_active = active
-	if not battle_active:
-		velocity = Vector2.ZERO
+
+func play_animation(animation_name: String):
+	animation_player.play(animation_name)

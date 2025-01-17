@@ -23,7 +23,7 @@ scale = Vector2(3, 3)
 position = Vector2(-373, 375)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-position = Vector2(335, 2)
+position = Vector2(129, -7.33333)
 position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
