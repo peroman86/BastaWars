@@ -152,3 +152,8 @@ func update_active_sprite():
 	idle_sprite.visible = is_on_floor() and velocity.x == 0
 	moving_sprite.visible = is_on_floor() and velocity.x != 0
 	jump_sprite.visible = not is_on_floor()
+
+func set_battle_active(active: bool):
+	battle_active = active
+	if not battle_active:
+		velocity = Vector2.ZERO

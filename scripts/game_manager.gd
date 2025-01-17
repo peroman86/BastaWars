@@ -103,7 +103,7 @@ func _on_respawn_pressed():
 	if enemy:
 		enemy.show()
 		enemy.respawn()
-		enemy.set_battle_active(true) 
+		enemy.set_battle_active(true)
 
 func _process(_delta):
 	# Loop the music
