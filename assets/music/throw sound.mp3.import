@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c244so316paut"
+path="res://.godot/imported/throw sound.mp3-3f4a0b077e035ba4d9210fe3dcddb2c3.mp3str"
+
+[deps]
+
+source_file="res://assets/music/throw sound.mp3"
+dest_files=["res://.godot/imported/throw sound.mp3-3f4a0b077e035ba4d9210fe3dcddb2c3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
