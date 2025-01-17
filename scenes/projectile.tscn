@@ -1,12 +1,108 @@
-[gd_scene load_steps=6 format=3 uid="uid://cone41q5l7hcl"]
+[gd_scene load_steps=15 format=3 uid="uid://cone41q5l7hcl"]
 
 [ext_resource type="Script" path="res://scripts/projectile.gd" id="1_nxu4t"]
-[ext_resource type="Texture2D" uid="uid://7lsqon71d2pf" path="res://assets/sprites/items/Bomb Off.png" id="2_3qicr"]
 [ext_resource type="Texture2D" uid="uid://bcyxnin401ty2" path="res://assets/sprites/items/Bomb On (52x56).png" id="3_12q1e"]
 [ext_resource type="Texture2D" uid="uid://qrwvv8aq5gsi" path="res://assets/sprites/items/Boooooom (52x56).png" id="4_sc0rl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_projectile"]
 radius = 8.0
+
+[sub_resource type="Animation" id="Animation_jydbt"]
+resource_name = "bombOff"
+step = 0.1
+
+[sub_resource type="Animation" id="Animation_a82yv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BombOnAnimation:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BoomAnimation:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_81tmx"]
+resource_name = "bombOn"
+length = 0.35
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BombOnAnimation:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_0jvqw"]
+resource_name = "boom"
+length = 0.5
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BoomAnimation:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3j45n"]
+_data = {
+"RESET": SubResource("Animation_a82yv"),
+"bombOff": SubResource("Animation_jydbt"),
+"bombOn": SubResource("Animation_81tmx"),
+"boom": SubResource("Animation_0jvqw")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oqfhw"]
+animation = &"bombOn"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nvg0x"]
+animation = &"boom"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3ntj6"]
+advance_mode = 2
+advance_condition = &"exploded"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uvyjy"]
+advance_mode = 2
+advance_condition = &"thrown"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_wgjsr"]
+states/bombOn/node = SubResource("AnimationNodeAnimation_oqfhw")
+states/bombOn/position = Vector2(376, 79.5)
+states/boom/node = SubResource("AnimationNodeAnimation_nvg0x")
+states/boom/position = Vector2(587.5, 121)
+transitions = ["bombOn", "boom", SubResource("AnimationNodeStateMachineTransition_3ntj6"), "Start", "bombOn", SubResource("AnimationNodeStateMachineTransition_uvyjy")]
+graph_offset = Vector2(-208.08, 23.265)
 
 [node name="Projectile" type="RigidBody2D"]
 collision_layer = 2
@@ -17,19 +113,24 @@ script = ExtResource("1_nxu4t")
 scale = Vector2(3, 3)
 shape = SubResource("CircleShape2D_projectile")
 
-[node name="BombOffAnimation" type="Sprite2D" parent="."]
-position = Vector2(-1.5, -14)
-scale = Vector2(3.096, 3.229)
-texture = ExtResource("2_3qicr")
-
 [node name="BombOnAnimation" type="Sprite2D" parent="."]
 position = Vector2(-2, -13)
 scale = Vector2(3, 3)
 texture = ExtResource("3_12q1e")
 hframes = 4
 
-[node name="BoomSnimation" type="Sprite2D" parent="."]
+[node name="BoomAnimation" type="Sprite2D" parent="."]
 scale = Vector2(3, 3)
 texture = ExtResource("4_sc0rl")
 hframes = 6
-frame = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3j45n")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_wgjsr")
+anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/exploded = false
+parameters/conditions/thrown = false

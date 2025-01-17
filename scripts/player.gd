@@ -107,8 +107,8 @@ func throw_ammo():
 	ammo_count -= 1
 	update_ammo_display()
 	var projectile = Projectile.instantiate()
-	projectile.position = position + Vector2( 30, 0)
-	projectile.modulate = Color(1, 0, 0)
+	projectile.position = position + Vector2(30, 0)
+	projectile.set_source(true)  # Mark as player projectile
 	get_parent().add_child(projectile)
 	projectile.throw(throw_force)
 

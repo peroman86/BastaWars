@@ -1,7 +1,14 @@
 extends RigidBody2D
 
+@onready var animation_tree: AnimationTree = $AnimationTree
+@onready var bomb_sprite: Sprite2D = $BombOnAnimation
+@onready var boom_sprite: Sprite2D = $BoomAnimation
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 var thrown = false
+var hit_wall = false
 var floor_y = 550  # Same Y position as the floor in world scene
+var is_player_projectile = false  # Track who fired the projectile
 
 func _ready():
 	gravity_scale = 1.5
@@ -9,33 +16,56 @@ func _ready():
 	max_contacts_reported = 1
 	connect("body_entered", _on_body_entered)
 	scale = Vector2(2, 2)
-	print("Projectile created at: ", position)
+	animation_tree.active = true
+	boom_sprite.hide()
+
+func _process(_delta):
+	update_animation_tree()
 
 func _physics_process(_delta):
 	if position.y >= floor_y:  # If projectile is at or below floor level
-		queue_free()
+		explode()
 		return
 
 func throw(force: float):
 	thrown = true
-	print("Throwing with force: ", force)
 	apply_central_impulse(Vector2(force, -600))
+
+func set_source(from_player: bool):
+	is_player_projectile = from_player
+	# Keep original sprite, just track the source for gameplay logic
 
 func _on_body_entered(body):
 	if not thrown:
 		return
 		
 	if body is StaticBody2D:
-		print("Hit wall!")
-		queue_free()
+		explode()
 	elif body.has_method("take_damage"):
-		# Only damage if the projectile color doesn't match the body
-		# Red projectiles (from player) damage blue enemies
-		# Blue projectiles (from enemy) damage the player
-		var is_player_projectile = modulate == Color(1, 0, 0)  # Red
+		# Check if projectile hits the correct target
 		var hit_player = body.get_script().resource_path.ends_with("player.gd")
 		
 		if (is_player_projectile and not hit_player) or (not is_player_projectile and hit_player):
-			print("Hit character!")
 			body.take_damage()
-			queue_free()
+			explode()
+
+func explode():
+	hit_wall = true
+	# Completely stop all movement
+	freeze = true
+	linear_velocity = Vector2.ZERO
+	angular_velocity = 0
+	# Show explosion sprite
+	update_active_sprite()
+	# Wait for explosion animation to finish
+	await get_tree().create_timer(0.5).timeout
+	queue_free()
+
+func update_active_sprite():
+	if hit_wall:
+		bomb_sprite.hide()
+		boom_sprite.show()
+
+func update_animation_tree():
+	animation_tree['parameters/conditions/thrown'] = thrown
+	animation_tree['parameters/conditions/exploded'] = hit_wall

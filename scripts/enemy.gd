@@ -96,7 +96,7 @@ func throw_ammo():
 	
 	var projectile = Projectile.instantiate()
 	projectile.position = position + Vector2(facing_direction * 30, 0)
-	projectile.modulate = Color(0, 0, 1)  # Blue projectile for enemy
+	projectile.set_source(false)  # Mark as enemy projectile
 	get_parent().add_child(projectile)
 	projectile.throw(facing_direction * throw_force)
 	
