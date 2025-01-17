@@ -9,6 +9,7 @@ var thrown = false
 var hit_wall = false
 var floor_y = 550  # Same Y position as the floor in world scene
 var is_player_projectile = false  # Track who fired the projectile
+var knockback_force = Vector2(400, -300)  # Horizontal and vertical knockback
 
 func _ready():
 	gravity_scale = 1.5
@@ -35,6 +36,13 @@ func set_source(from_player: bool):
 	is_player_projectile = from_player
 	# Keep original sprite, just track the source for gameplay logic
 
+func apply_knockback(body: CharacterBody2D):
+	# Calculate direction from explosion to body
+	var direction = (body.position - position).normalized()
+	# Apply horizontal knockback in the direction of impact
+	var knockback = Vector2(knockback_force.x * direction.x, knockback_force.y)
+	body.velocity = knockback
+
 func _on_body_entered(body):
 	if not thrown:
 		return
@@ -47,6 +55,8 @@ func _on_body_entered(body):
 		
 		if (is_player_projectile and not hit_player) or (not is_player_projectile and hit_player):
 			body.take_damage()
+			if body is CharacterBody2D:
+				apply_knockback(body)
 			explode()
 
 func explode():
